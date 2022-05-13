@@ -1,0 +1,9 @@
+@extends('layouts.app')
+
+@section('title', 'Projects')
+
+@section('content')
+
+    Tasks Page
+
+@endsection
