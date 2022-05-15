@@ -58,7 +58,7 @@ export default {
         },
         addTaskStatus(){
             let _this = this;
-            axios.post('/apis/add_task_status', _this.task_status).then(response => {
+            axios.post('/add_task_status', _this.task_status).then(response => {
                 _this.reset();
                 _this.close();
             }).catch(error => {

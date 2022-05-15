@@ -70,7 +70,7 @@ export default {
     methods : {
         getTask(){
             let _this = this;
-            axios.get('/apis/getTask/'+_this.id)
+            axios.get('/getTask/'+_this.id)
                 .then(response => {
                     _this.task = response.data.task;
                 }).catch(error => {

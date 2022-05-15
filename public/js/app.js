@@ -19391,14 +19391,14 @@ __webpack_require__.r(__webpack_exports__);
     getProjects: function getProjects() {
       var _this = this;
 
-      axios.get('/apis/get-projects').then(function (response) {
+      axios.get('/get-projects').then(function (response) {
         _this.projects = response.data.projects;
       })["catch"](function (error) {});
     },
     getTasks: function getTasks() {
       var _this = this;
 
-      axios.get('/apis/get-tasks').then(function (response) {
+      axios.get('/get-tasks').then(function (response) {
         _this.tasks = response.data.tasks;
       })["catch"](function (error) {});
     },
@@ -19481,7 +19481,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.loader = true;
-      axios.post('/apis/addComment/', {
+      axios.post('/addComment/', {
         description: _this.description,
         comment_id: _this.comment_id_for_reply,
         model: 'Task',
@@ -19633,7 +19633,7 @@ __webpack_require__.r(__webpack_exports__);
     addProject: function addProject() {
       var _this = this;
 
-      axios.post('/apis/add-project', _this.project).then(function (response) {
+      axios.post('/add-project', _this.project).then(function (response) {
         _this.reset();
 
         _this.close();
@@ -19736,7 +19736,7 @@ __webpack_require__.r(__webpack_exports__);
     addTaskStatus: function addTaskStatus() {
       var _this = this;
 
-      axios.post('/apis/add_task_status', _this.task_status).then(function (response) {
+      axios.post('/add_task_status', _this.task_status).then(function (response) {
         _this.reset();
 
         _this.close();
@@ -19818,7 +19818,7 @@ __webpack_require__.r(__webpack_exports__);
     getTaskStatuses: function getTaskStatuses() {
       var _this = this;
 
-      axios.get('/apis/get_active_task_statuses').then(function (response) {
+      axios.get('/get_active_task_statuses').then(function (response) {
         _this.statuses = response.data.task_statuses;
       })["catch"](function (error) {
         if (error.response.data.errors) {
@@ -19829,7 +19829,7 @@ __webpack_require__.r(__webpack_exports__);
     getProjects: function getProjects() {
       var _this = this;
 
-      axios.get('/apis/get-active-projects').then(function (response) {
+      axios.get('/get-active-projects').then(function (response) {
         _this.projects = response.data.projects;
       })["catch"](function (error) {
         if (error.response.data.errors) {
@@ -19840,7 +19840,7 @@ __webpack_require__.r(__webpack_exports__);
     addTask: function addTask() {
       var _this = this;
 
-      axios.post('/apis/add-task', _this.task).then(function (response) {
+      axios.post('/add-task', _this.task).then(function (response) {
         _this.reset();
 
         _this.close();
@@ -19888,7 +19888,7 @@ __webpack_require__.r(__webpack_exports__);
     getTask: function getTask() {
       var _this = this;
 
-      axios.get('/apis/getTask/' + _this.id).then(function (response) {
+      axios.get('/getTask/' + _this.id).then(function (response) {
         _this.task = response.data.task;
       })["catch"](function (error) {});
     }
