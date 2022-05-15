@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\AC;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,7 @@ class ProjectController extends Controller
             [ 'id' => $request->input('id') ],
             [
                 'name' => $request->input('name'),
-                !$request->input('id') ? 'created_by' : 'updated_by' => Auth::id()
+                !$request->input('id') ? 'created_id' : 'updated_id' => Auth::id()
             ]
         );
 
@@ -45,7 +46,10 @@ class ProjectController extends Controller
 
     public function getActive()
     {
-        $projects = Project::orderBy('name', 'asc')->where('created_id', Auth::id())->active()->get();
+        $projects = Project::orderBy('name', 'asc')
+            ->where('created_id', Auth::id())
+            ->where('status', AC::_ACTIVE)
+            ->get();
 
         return $this->processResponse('projects', $projects);
     }

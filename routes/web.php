@@ -8,9 +8,9 @@ Route::middleware('auth')->group(function()
 {
     Route::view('/projects-list', 'projects')->name('projects');
 
-    Route::view('/tasks-list', 'tasks')->name('tasks');
-
     Route::view('/task-status-list', 'task_statuses')->name('task.statuses');
+
+    Route::get('/tasks/{task}', [\App\Http\Controllers\TaskController::class, 'show']);
 
     Route::view('/home', 'home')->name('home');
 
@@ -22,10 +22,13 @@ Route::middleware('auth')->group(function()
 
         Route::post('/add-task', [\App\Http\Controllers\TaskController::class, 'add']);
         Route::get('/get-tasks', [\App\Http\Controllers\TaskController::class, 'get']);
+        Route::get('/getTask/{task}', [\App\Http\Controllers\TaskController::class, 'getTask']);
 
         Route::post('/add_task_status', [\App\Http\Controllers\TaskStatusController::class, 'add']);
-        Route::get('/get_task_statuses', [\App\Http\Controllers\ProjectController::class, 'get']);
-        Route::get('/get_active_task_statuses', [\App\Http\Controllers\ProjectController::class, 'getActive']);
+        Route::get('/get_task_statuses', [\App\Http\Controllers\TaskStatusController::class, 'get']);
+        Route::get('/get_active_task_statuses', [\App\Http\Controllers\TaskStatusController::class, 'getActive']);
+
+        Route::post('/uploadAttachment', [\App\Http\Controllers\ImageController::class, 'uploadAttachment']);
     });
 });
 

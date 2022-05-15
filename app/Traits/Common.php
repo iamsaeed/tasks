@@ -2,7 +2,7 @@
 
 namespace App\Traits;
 
-use App\Constants\AC;
+use App\Models\Image;
 use App\Models\Comment;
 use App\Models\User;
 use Carbon\Carbon;
@@ -31,16 +31,6 @@ trait Common
         return $this->belongsTo(User::class, 'deleted_id', 'id');
     }
 
-    public function scopeActive($query)
-    {
-        return $query->status === AC::_ACTIVE;
-    }
-
-    public function scopeInactive($query)
-    {
-        return $query->status === AC::_INACTIVE;
-    }
-
     public function comments()
     {
         return $this->morphMany(Comment::class, 'commentable')
@@ -54,5 +44,10 @@ trait Common
         return $this->hasMany(Comment::class, 'parent_id', 'id')
             ->where('parent_id', '!=', null)
             ->orderBy('created_at', 'desc');
+    }
+
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imagable')->orderBy('created_at');
     }
 }

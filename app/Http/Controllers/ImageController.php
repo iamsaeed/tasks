@@ -2,85 +2,43 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreImageRequest;
-use App\Http\Requests\UpdateImageRequest;
 use App\Models\Image;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Intervention\Image\Facades\Image as Photo;
 
 class ImageController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function uploadAttachment(Request $request)
     {
-        //
-    }
+        $type = ("App\\Models\\" . Str::studly($request->input('model')))::find($request->input('id'));
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+        $data = base64_decode(explode(',', $request->input('file'))[1]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreImageRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreImageRequest $request)
-    {
-        //
-    }
+        $extension = explode('/', explode(':', substr($request->input('file'), 0, strpos($request->input('file'), ';')))[1])[1];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Image $image)
-    {
-        //
-    }
+        if($extension ==='vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        {
+            $extension = 'xlsx';
+        } else if ($extension === 'vnd.openxmlformats-officedocument.wordprocessingml.document')
+        {
+            $extension = 'docx';
+        }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Image $image)
-    {
-        //
-    }
+        $filename = Str::slug(Auth::user()->name). '_' .Auth::id() . '_' . Carbon::now()->timestamp .'.'.$extension;
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateImageRequest  $request
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateImageRequest $request, Image $image)
-    {
-        //
-    }
+        file_put_contents(public_path('/images/attachments/' . $filename), $data);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Image  $image
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Image $image)
-    {
-        //
+        $image = \App\Models\Image::create(
+            [
+                'name' => $filename,
+                'created_by' => Auth::id()
+            ]
+        );
+
+        $type->images()->save($image);
     }
 }

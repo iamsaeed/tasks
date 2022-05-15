@@ -2,13 +2,12 @@
     <div class="bg-white shadow overflow-hidden sm:rounded-md">
         <ul role="list" class="divide-y divide-gray-200">
             <li>
-                <a href="#" class="block hover:bg-gray-50">
+                <a :href="'/tasks/'+task.id" class="block hover:bg-gray-50">
                     <div class="px-4 py-4 flex items-center sm:px-6">
                         <div class="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                             <div class="truncate">
                                 <div class="flex text-sm">
                                     <p class="font-medium text-indigo-600 truncate">{{ task.title }}</p>
-                                    <p class="ml-1 flex-shrink-0 font-normal text-gray-500">{{task.created_by}}</p>
                                 </div>
                                 <div class="mt-2 flex">
                                     <div class="flex items-center text-sm text-gray-500">

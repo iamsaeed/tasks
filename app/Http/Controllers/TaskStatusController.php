@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Constants\AC;
 use App\Http\Requests\StoreTaskStatusRequest;
 use App\Http\Requests\UpdateTaskStatusRequest;
 use App\Models\Project;
@@ -48,7 +49,7 @@ class TaskStatusController extends Controller
 
     public function getActive()
     {
-        $task_statuses = TaskStatus::orderBy('name', 'asc')->active()->get();
+        $task_statuses = TaskStatus::orderBy('name', 'asc')->where('status', AC::_ACTIVE)->get();
 
         return $this->processResponse('task_statuses', $task_statuses);
     }

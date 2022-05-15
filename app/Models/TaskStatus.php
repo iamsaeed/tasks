@@ -8,6 +8,6 @@ class TaskStatus extends App
 
     public function tasks()
     {
-        return $this->hasMany(Task::class);
+        return $this->hasMany(Task::class, 'task_status_id', 'id');
     }
 }

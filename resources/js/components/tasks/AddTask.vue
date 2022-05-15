@@ -4,9 +4,25 @@
         <form class="space-y-3" @submit.prevent="addTask" method="post">
 
             <div>
+                <label class="block text-sm font-medium text-gray-700"> Status </label>
+                <div class="mt-1">
+                    <select v-model="task.task_status_id" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option selected disabled value="">Select Status</option>
+                        <option v-for="status in statuses" :value="status.id">{{status.name}}</option>
+                    </select>
+                    <small class="text-red-500 font-light" v-if="errors && errors.project_id">
+                        <strong>{{errors.project_id[0]}}</strong>
+                    </small>
+                </div>
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700"> Project </label>
                 <div class="mt-1">
-
+                    <select v-model="task.project_id" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                        <option selected disabled value="">Select Project</option>
+                        <option v-for="project in projects" :value="project.id">{{project.name}}</option>
+                    </select>
                     <small class="text-red-500 font-light" v-if="errors && errors.project_id">
                         <strong>{{errors.project_id[0]}}</strong>
                     </small>
@@ -62,7 +78,6 @@ export default {
         isEditable : {
             default : false
         } ,
-        projects : '',
         project_id : {
             default : null
         },
@@ -73,10 +88,13 @@ export default {
     components : { SlideOver },
     data(){
         return {
+            statuses : [],
+            projects : [],
             task: {
                 title : '',
                 description : '',
-                project_id : 1
+                project_id : '',
+                task_status_id : ''
             },
             errors : '',
             success : '',
@@ -86,20 +104,42 @@ export default {
 
     },
     created() {
-
+        this.getProjects();
+        this.getTaskStatuses();
     },
     methods : {
         reset(){
             this.task = {
                 title : '',
                 description : '',
-                project_id : 1
+                project_id : 1,
+                task_status_id : 1
             };
             this.errors = '';
             this.success = '';
         },
         close(){
            this.$emit('close')
+        },
+        getTaskStatuses(){
+            let _this = this;
+            axios.get('/api/get_active_task_statuses',).then(response => {
+                _this.statuses = response.data.task_statuses;
+            }).catch(error => {
+                if(error.response.data.errors){
+                    _this.errors = error.response.data.errors
+                }
+            })
+        },
+        getProjects(){
+            let _this = this;
+            axios.get('/api/get-active-projects').then(response => {
+                _this.projects = response.data.projects;
+            }).catch(error => {
+                if(error.response.data.errors){
+                    _this.errors = error.response.data.errors
+                }
+            })
         },
         addTask(){
             let _this = this;

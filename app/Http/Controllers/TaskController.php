@@ -33,11 +33,33 @@ class TaskController extends Controller
            [
                'title' => $request->input('title'),
                'description' => $request->input('description') ?? null,
+               'task_status_id' => $request->input('task_status_id'),
                'project_id' => $request->input('project_id'),
-               !$request->input('id') ? 'created_by' : 'updated_by' => Auth::id()
+               'ends_at' => $request->input('ends_at'),
+               'priority' => $request->input('priority'),
+               !$request->input('id') ? 'created_id' : 'updated_id' => Auth::id()
            ]
        );
 
        $this->processResponse('task', $task, $message);
+   }
+
+   public function show(Task $task)
+   {
+        abort_if(Auth::id() !== $task->created_id, 404);
+
+        return view('task_show', [
+            'task' => $task
+        ]);
+   }
+
+   public function getTask(Task $task)
+   {
+        $t = Task::where('id', $task->id)
+            ->withCount('images')
+            ->with(['created_by', 'status', 'project', 'images'])
+            ->first();
+
+        return $this->processResponse('task', $t);
    }
 }

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Project;
+use App\Models\TaskStatus;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -14,7 +15,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UserSeeder::class);
-        Project::factory()->count(10)->create();
+        $this->call([
+            UserSeeder::class,
+            TaskStatusSeeder::class,
+        ]);
+
+        Project::factory()->count(15)->create();
     }
 }

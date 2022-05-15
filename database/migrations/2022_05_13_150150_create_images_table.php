@@ -16,9 +16,8 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('folder')->nullable()->default(null);
-            $table->string('model_type');
-            $table->unsignedBigInteger('model_id');
+            $table->string('imagable_type')->nullable()->default(null);
+            $table->unsignedBigInteger('imagable_id')->nullable()->default(null);
             $table->enum('status',['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('created_id')->nullable()->default(null);
             $table->unsignedBigInteger('updated_id')->nullable()->default(null);
