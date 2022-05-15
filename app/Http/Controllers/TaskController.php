@@ -2,85 +2,42 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreTaskRequest;
-use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+   public function get()
+   {
+       $tasks = Task::where('created_id', Auth::id())
+           ->where('created_id', Auth::id())
+           ->with(['created_by'])
+           ->orderBy('created_at', 'desc')
+           ->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+       return $this->processResponse('tasks', $tasks);
+   }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTaskRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTaskRequest $request)
-    {
-        //
-    }
+   public function add(Request $request)
+   {
+       $request->validate([
+           'title' => 'required',
+           'project_id' => 'required',
+       ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Task $task)
-    {
-        //
-    }
+       $message = !$request->input('id') ? 'Task added!' : 'Task updated!';
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Task $task)
-    {
-        //
-    }
+       $task = Task::updateOrCreate(
+           [ 'id' => $request->input('id') ],
+           [
+               'title' => $request->input('title'),
+               'description' => $request->input('description') ?? null,
+               'project_id' => $request->input('project_id'),
+               !$request->input('id') ? 'created_by' : 'updated_by' => Auth::id()
+           ]
+       );
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateTaskRequest  $request
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateTaskRequest $request, Task $task)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Task  $task
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Task $task)
-    {
-        //
-    }
+       $this->processResponse('task', $task, $message);
+   }
 }

@@ -3,7 +3,5 @@
 @section('title', 'Projects')
 
 @section('content')
-
-    Projects Page
-
+    Projects
 @endsection

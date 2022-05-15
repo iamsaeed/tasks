@@ -4,83 +4,52 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskStatusRequest;
 use App\Http\Requests\UpdateTaskStatusRequest;
+use App\Models\Project;
 use App\Models\TaskStatus;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskStatusController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function add(Request $request)
     {
-        //
+        if(!$request->input('id'))
+        {
+            $message = 'Task Status added!';
+
+            $request->validate([
+                'name' => 'required|unique:task_statuses,name'
+            ]);
+        } else {
+            $message = 'Task Status updated!';
+
+            $request->validate([
+                'name' => 'required|unique:task_statuses,name,'.$request->input('id')
+            ]);
+        }
+
+        $task_status = TaskStatus::updateOrCreate(
+            [ 'id' => $request->input('id') ],
+            [
+                'name' => $request->input('name'),
+                !$request->input('id') ? 'created_by' : 'updated_by' => Auth::id()
+            ]
+        );
+
+        $this->processResponse('task_statuses', $task_status, $message);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function get()
     {
-        //
+        $task_statuses = TaskStatus::orderBy('name', 'asc')->get();
+
+        return $this->processResponse('task_statuses', $task_statuses);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreTaskStatusRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreTaskStatusRequest $request)
+    public function getActive()
     {
-        //
-    }
+        $task_statuses = TaskStatus::orderBy('name', 'asc')->active()->get();
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\TaskStatus  $taskStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function show(TaskStatus $taskStatus)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\TaskStatus  $taskStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(TaskStatus $taskStatus)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateTaskStatusRequest  $request
-     * @param  \App\Models\TaskStatus  $taskStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateTaskStatusRequest $request, TaskStatus $taskStatus)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\TaskStatus  $taskStatus
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(TaskStatus $taskStatus)
-    {
-        //
+        return $this->processResponse('task_statuses', $task_statuses);
     }
 }

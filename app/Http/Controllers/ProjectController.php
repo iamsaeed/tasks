@@ -2,85 +2,51 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProjectRequest;
-use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProjectController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
+   public function add(Request $request)
+   {
+       if(!$request->input('id'))
+       {
+           $message = 'Project added!';
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+           $request->validate([
+               'name' => 'required|unique:projects,name'
+           ]);
+       } else {
+           $message = 'Project updated!';
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreProjectRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreProjectRequest $request)
-    {
-        //
-    }
+           $request->validate([
+               'name' => 'required|unique:projects,name,'.$request->input('id')
+           ]);
+       }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Project $project)
-    {
-        //
-    }
+        $project = Project::updateOrCreate(
+            [ 'id' => $request->input('id') ],
+            [
+                'name' => $request->input('name'),
+                !$request->input('id') ? 'created_by' : 'updated_by' => Auth::id()
+            ]
+        );
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Project $project)
-    {
-        //
-    }
+        $this->processResponse('project', $project, $message);
+   }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateProjectRequest  $request
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateProjectRequest $request, Project $project)
-    {
-        //
-    }
+   public function get()
+   {
+       $projects = Project::orderBy('name', 'asc')->where('created_id', Auth::id())->get();
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Project  $project
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Project $project)
+       return $this->processResponse('projects', $projects);
+   }
+
+    public function getActive()
     {
-        //
+        $projects = Project::orderBy('name', 'asc')->where('created_id', Auth::id())->active()->get();
+
+        return $this->processResponse('projects', $projects);
     }
 }

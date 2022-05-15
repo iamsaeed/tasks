@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('title', 'Tasks')
+@section('title', 'Task Statuses')
 
 @section('content')
 
-    Tasks Page
+    Task Statuses Page
 
 @endsection
