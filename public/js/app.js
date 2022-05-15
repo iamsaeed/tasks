@@ -19571,7 +19571,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.loader = true;
-      axios.post('/apis/uploadAttachment/', {
+      axios.post('/uploadAttachment/', {
         'file': _this.file,
         'model': 'Task',
         'id': _this.id
