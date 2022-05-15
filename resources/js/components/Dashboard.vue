@@ -54,7 +54,7 @@ export default {
     methods : {
         getProjects(){
             let _this = this;
-            axios.get('/api/get-projects')
+            axios.get('/apis/get-projects')
             .then(response => {
                 _this.projects = response.data.projects;
             }).catch(error => {
@@ -63,7 +63,7 @@ export default {
         },
         getTasks(){
             let _this = this;
-            axios.get('/api/get-tasks')
+            axios.get('/apis/get-tasks')
                 .then(response => {
                     _this.tasks = response.data.tasks;
                 }).catch(error => {

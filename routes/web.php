@@ -14,7 +14,7 @@ Route::middleware('auth')->group(function()
 
     Route::view('/home', 'home')->name('home');
 
-    Route::prefix('apis')->group(function()
+    Route::prefix('api')->group(function()
     {
         Route::post('/add-project', [\App\Http\Controllers\ProjectController::class, 'add']);
         Route::get('/get-projects', [\App\Http\Controllers\ProjectController::class, 'get']);
