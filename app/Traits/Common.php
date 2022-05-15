@@ -36,14 +36,15 @@ trait Common
         return $this->morphMany(Comment::class, 'commentable')
             ->withCount('comment_replies')
             ->where('parent_id', null)
-            ->with('comment_replies');
+            ->with(['comment_replies', 'created_by'])
+            ->orderBy('id', 'desc');
     }
 
     public function comment_replies()
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id')
             ->where('parent_id', '!=', null)
-            ->orderBy('created_at', 'desc');
+            ->with('created_by');
     }
 
     public function images()

@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function()
         Route::get('/get_active_task_statuses', [\App\Http\Controllers\TaskStatusController::class, 'getActive']);
 
         Route::post('/uploadAttachment', [\App\Http\Controllers\ImageController::class, 'uploadAttachment']);
+
+        Route::post('/addComment', [\App\Http\Controllers\CommentController::class, 'add']);
     });
 });
 

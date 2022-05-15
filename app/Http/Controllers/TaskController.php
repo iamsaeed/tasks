@@ -57,7 +57,7 @@ class TaskController extends Controller
    {
         $t = Task::where('id', $task->id)
             ->withCount('images')
-            ->with(['created_by', 'status', 'project', 'images'])
+            ->with(['created_by', 'status', 'project', 'images', 'comments'])
             ->first();
 
         return $this->processResponse('task', $t);

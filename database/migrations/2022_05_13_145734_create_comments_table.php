@@ -16,8 +16,8 @@ class CreateCommentsTable extends Migration
         Schema::create('comments', function (Blueprint $table) {
             $table->id();
             $table->text('description');
-            $table->unsignedBigInteger('commentable_id');
-            $table->string('commentable_type');
+            $table->unsignedBigInteger('commentable_id')->nullable()->default(null);
+            $table->string('commentable_type')->nullable()->default(null);
             $table->unsignedBigInteger('parent_id')->nullable()->default(null);
             $table->enum('status',['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('created_id')->nullable()->default(null);
