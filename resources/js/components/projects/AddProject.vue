@@ -58,7 +58,7 @@ export default {
         },
         addProject(){
             let _this = this;
-            axios.post('/api/add-project', _this.project).then(response => {
+            axios.post('/apis/add-project', _this.project).then(response => {
                 _this.reset();
                 _this.close();
             }).catch(error => {

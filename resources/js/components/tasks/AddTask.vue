@@ -123,7 +123,7 @@ export default {
         },
         getTaskStatuses(){
             let _this = this;
-            axios.get('/api/get_active_task_statuses',).then(response => {
+            axios.get('/apis/get_active_task_statuses',).then(response => {
                 _this.statuses = response.data.task_statuses;
             }).catch(error => {
                 if(error.response.data.errors){
@@ -133,7 +133,7 @@ export default {
         },
         getProjects(){
             let _this = this;
-            axios.get('/api/get-active-projects').then(response => {
+            axios.get('/apis/get-active-projects').then(response => {
                 _this.projects = response.data.projects;
             }).catch(error => {
                 if(error.response.data.errors){
@@ -143,7 +143,7 @@ export default {
         },
         addTask(){
             let _this = this;
-            axios.post('/api/add-task', _this.task).then(response => {
+            axios.post('/apis/add-task', _this.task).then(response => {
                 _this.reset();
                 _this.close();
             }).catch(error => {

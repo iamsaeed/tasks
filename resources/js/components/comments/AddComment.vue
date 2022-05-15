@@ -153,7 +153,7 @@ export default {
         addComment(){
             let _this = this;
             _this.loader = true
-            axios.post('/api/addComment/', {
+            axios.post('/apis/addComment/', {
                 description : _this.description,
                 comment_id: _this.comment_id_for_reply,
                 model : 'Task',
