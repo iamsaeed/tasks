@@ -19481,7 +19481,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.loader = true;
-      axios.post('/addComment/', {
+      axios.post('/addComment', {
         description: _this.description,
         comment_id: _this.comment_id_for_reply,
         model: 'Task',
@@ -19571,7 +19571,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       _this.loader = true;
-      axios.post('/uploadAttachment/', {
+      axios.post('/uploadAttachment', {
         'file': _this.file,
         'model': 'Task',
         'id': _this.id

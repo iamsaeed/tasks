@@ -68,7 +68,7 @@ export default {
         uploadFile(){
             let _this = this;
             _this.loader = true
-            axios.post('/uploadAttachment/', {'file': _this.file, 'model' : 'Task', 'id' : _this.id})
+            axios.post('/uploadAttachment', {'file': _this.file, 'model' : 'Task', 'id' : _this.id})
                 .then(response => {
                     _this.$emit('success')
                     _this.loader = false
