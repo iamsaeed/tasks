@@ -45,9 +45,9 @@ Points Completed
 Points not completed
 - Automated testing (lack of time and practice)
 
-## Permissions (On Linux Environment)
+## Permissions (On Linux Or Mac Environment)
 Make sure to run the following command if installing on linux or mac environment
-- `sudo chmod -R 0755 public/images/`
+- `sudo chmod -R 777 public/images/`
 - `sudo chmod -R 0755 public/images/attachment/`
 - `sudo chmod -R 777 storage`
 

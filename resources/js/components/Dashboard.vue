@@ -19,12 +19,14 @@
     </div>
 
     <div class="grid grid-cols-1 mt-5">
-        <Task class="my-1" v-for="task in tasks" :task="task" />
+        <div v-for="task in tasks">
+            <Task class="my-1" :task="task" @del="getTasks" />
+        </div>
     </div>
 
     <AddProject :open="openProject" @close="closeProject" />
 
-    <AddTask :open="openTask" :projects="projects" @close="closeTask" />
+    <AddTask :editTask="task" :open="openTask" @close="closeTask" />
 
     <AddTaskStatus :open="openTaskStatus" @close="closeTaskStatus" />
 
@@ -44,7 +46,8 @@ export default {
             openTask : false,
             openTaskStatus : false,
             projects : [],
-            tasks : []
+            tasks : [],
+            task : null,
         }
     },
     created() {
@@ -52,6 +55,7 @@ export default {
       this.getTasks();
     },
     methods : {
+
         getProjects(){
             let _this = this;
             axios.get('/get-projects')

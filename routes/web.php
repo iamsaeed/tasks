@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function()
 
     Route::post('/add-task', [\App\Http\Controllers\TaskController::class, 'add']);
     Route::get('/get-tasks', [\App\Http\Controllers\TaskController::class, 'get']);
+    Route::post('/delete-tasks', [\App\Http\Controllers\TaskController::class, 'destroy']);
     Route::get('/getTask/{task}', [\App\Http\Controllers\TaskController::class, 'getTask']);
 
     Route::post('/add_task_status', [\App\Http\Controllers\TaskStatusController::class, 'add']);
