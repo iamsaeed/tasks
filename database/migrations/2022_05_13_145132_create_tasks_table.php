@@ -21,7 +21,6 @@ class CreateTasksTable extends Migration
             $table->unsignedBigInteger('project_id');
             $table->integer('priority')->nullable()->default(null);
             $table->date('ends_at')->nullable()->default(null);
-            $table->enum('status',['active', 'inactive'])->default('active');
             $table->unsignedBigInteger('created_id')->nullable()->default(null);
             $table->unsignedBigInteger('updated_id')->nullable()->default(null);
             $table->timestamps();

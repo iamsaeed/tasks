@@ -42,7 +42,7 @@ class TaskStatusController extends Controller
 
     public function get()
     {
-        $task_statuses = TaskStatus::orderBy('name', 'asc')->get();
+        $task_statuses = TaskStatus::orderBy('name', 'asc')->withCount(['tasks', 'created_by'])->get();
 
         return $this->processResponse('task_statuses', $task_statuses);
     }
@@ -52,5 +52,13 @@ class TaskStatusController extends Controller
         $task_statuses = TaskStatus::orderBy('name', 'asc')->where('status', AC::_ACTIVE)->get();
 
         return $this->processResponse('task_statuses', $task_statuses);
+    }
+
+    public function destroy(Request $request)
+    {
+        $project = TaskStatus::find($request->input('id'));
+        $project->delete();
+
+        return $this->processResponse('project', null,  'Task Status deleted successfully!');
     }
 }

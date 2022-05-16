@@ -4,6 +4,6 @@
 
 @section('content')
 
-    Task Statuses Page
+    <task-statuses-index />
 
 @endsection

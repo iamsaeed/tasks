@@ -30,6 +30,13 @@
             </div>
 
             <div>
+                <label class="block text-sm font-medium text-gray-700"> Deadline </label>
+                <div class="mt-1">
+                    <input v-model="task.ends_at" autofocus type="date" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                </div>
+            </div>
+
+            <div>
                 <label class="block text-sm font-medium text-gray-700"> Title </label>
                 <div class="mt-1">
                     <input placeholder="Title" v-model="task.title" autofocus type="text" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
@@ -78,10 +85,7 @@ export default {
         isEditable : {
             default : false
         } ,
-        project_id : {
-            default : null
-        },
-        query : {
+        editTask : {
             default : ''
         }
     },
@@ -94,26 +98,30 @@ export default {
                 title : '',
                 description : '',
                 project_id : '',
-                task_status_id : ''
+                task_status_id : '',
+                ends_at : ''
             },
             errors : '',
             success : '',
         }
     },
-    computed : {
-
-    },
-    created() {
+    mounted() {
         this.getProjects();
         this.getTaskStatuses();
+    },
+    created() {
+      if(this.isEditable){
+          this.task = this.editTask
+      }
     },
     methods : {
         reset(){
             this.task = {
                 title : '',
                 description : '',
-                project_id : 1,
-                task_status_id : 1
+                project_id : '',
+                task_status_id : '',
+                ends_at : ''
             };
             this.errors = '';
             this.success = '';
@@ -151,7 +159,7 @@ export default {
                     _this.errors = error.response.data.errors
                 }
             })
-        }
+        },
     }
 }
 </script>

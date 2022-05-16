@@ -18,15 +18,37 @@
         </div>
     </div>
 
-    <div class="grid grid-cols-1 mt-5">
-        <Task class="my-1" v-for="task in tasks" :task="task" />
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div>
+            <label class="block text-sm font-medium text-gray-700"> Filter Projects </label>
+            <div class="mt-1">
+                <select @change="handleProjectChange" v-model="project_id" class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                    <option value="">Show All</option>
+                    <option v-for="project in projects" :value="project.id">{{project.name}}</option>
+                </select>
+            </div>
+        </div>
     </div>
 
-    <AddProject :open="openProject" @close="closeProject" />
+    <div class="grid grid-cols-1 mt-5">
+        <div v-for="task in tasks">
+            <div v-if="task">
+                <Task class="my-1" :task="task" @del="getTasks" @edit="editTask" />
+            </div>
+        </div>
+    </div>
 
-    <AddTask :open="openTask" :projects="projects" @close="closeTask" />
+    <div v-if="openProject">
+        <AddProject :open="openProject" @close="closeProject" />
+    </div>
 
-    <AddTaskStatus :open="openTaskStatus" @close="closeTaskStatus" />
+    <div v-if="openTask">
+        <AddTask :editTask="task" :isEditable="isEditable" :open="openTask" @close="closeTask" />
+    </div>
+
+    <div v-if="openTaskStatus">
+        <AddTaskStatus :open="openTaskStatus" @close="closeTaskStatus" />
+    </div>
 
 </template>
 
@@ -44,7 +66,10 @@ export default {
             openTask : false,
             openTaskStatus : false,
             projects : [],
-            tasks : []
+            tasks : [],
+            task : {},
+            isEditable : false,
+            project_id: ''
         }
     },
     created() {
@@ -52,6 +77,9 @@ export default {
       this.getTasks();
     },
     methods : {
+        handleProjectChange(){
+            this.getTasks();
+        },
         getProjects(){
             let _this = this;
             axios.get('/get-projects')
@@ -63,7 +91,7 @@ export default {
         },
         getTasks(){
             let _this = this;
-            axios.get('/get-tasks')
+            axios.get('/get-tasks/?project_id='+this.project_id)
                 .then(response => {
                     _this.tasks = response.data.tasks;
                 }).catch(error => {
@@ -82,7 +110,14 @@ export default {
         },
         closeTask(){
             this.openTask = false;
+            this.isEditable = false;
+            this.task = '';
             this.getTasks();
+        },
+        editTask(task){
+          this.task = task;
+          this.openTask = true;
+          this.isEditable = true;
         },
         addTaskStatus(){
             this.openTaskStatus = true;

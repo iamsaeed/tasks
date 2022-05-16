@@ -3,5 +3,5 @@
 @section('title', 'Projects')
 
 @section('content')
-    Projects
+    <projects-index />
 @endsection

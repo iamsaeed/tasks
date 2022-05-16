@@ -29,6 +29,9 @@ export default {
             loader : false
         }
     },
+    created() {
+
+    },
     methods : {
         selectFileToUpload(){
             document.querySelector('#file-input').click();

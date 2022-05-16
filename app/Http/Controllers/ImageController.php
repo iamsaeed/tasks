@@ -41,4 +41,12 @@ class ImageController extends Controller
 
         $type->images()->save($image);
     }
+
+    public function deleteSingleImage($id, $path)
+    {
+        $image = \App\Models\Image::find($id);
+        $filename = public_path($path . $image->name);
+        unlink($filename);
+        $image->delete();
+    }
 }

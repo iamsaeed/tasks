@@ -40,6 +40,11 @@ trait Common
             ->orderBy('id', 'desc');
     }
 
+    public function all_comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+
     public function comment_replies()
     {
         return $this->hasMany(Comment::class, 'parent_id', 'id')

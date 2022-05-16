@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-   public function get()
+   public function get(Request $request)
    {
+       $project_id = $request->input('project_id');
+
        $tasks = Task::where('created_id', Auth::id())
+           ->search('project_id', $project_id)
            ->where('created_id', Auth::id())
            ->with(['created_by'])
            ->orderBy('created_at', 'desc')
@@ -61,5 +65,32 @@ class TaskController extends Controller
             ->first();
 
         return $this->processResponse('task', $t);
+   }
+
+   public function destroy(Request $request, ImageController $controller)
+   {
+       $task = Task::find($request->input('id'));
+
+       DB::beginTransaction();
+       // delete images
+       if($task->images->count())
+       {
+           foreach($task->images as $image)
+           {
+               $controller->deleteSingleImage($image->id, '/images/attachments/');
+           }
+       }
+
+       // delete comments and their replies
+       if($task->all_comments->count())
+       {
+           $task->all_comments()->delete();
+       }
+
+       // delete
+       $task->delete();
+       DB::commit();
+
+       return $this->processResponse(null, null, 'Task deleted!');
    }
 }

@@ -1,7 +1,6 @@
 <template>
     <!-- This example requires Tailwind CSS v2.0+ -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-2">
-        <div class="md:col-span-2">
+        <div class="">
             <div class="bg-white shadow overflow-hidden sm:rounded-lg">
                 <div class="px-4 py-5 sm:px-6">
                     <h3 class="text-lg leading-6 text-gray-900 text-capitalize capitalize">{{ task.title }}</h3>
@@ -26,7 +25,7 @@
                                 <div>Attachments</div>
                                 <Upload model="Task" :id="id" @success="getTask" />
                             </dt>
-                            <dd class="mt-1 text-sm text-gray-900 h-52 overflow-y-auto" v-if="task.images_count">
+                            <dd class="mt-1 text-sm text-gray-900 h-24 overflow-y-auto " v-if="task.images_count">
                                 <ul role="list" class="border border-gray-200 rounded-md divide-y divide-gray-200">
                                     <li class="pl-3 pr-4 py-3 flex items-center justify-between text-sm" v-for="image in task.images">
                                         <div class="w-0 flex-1 flex items-center">
@@ -50,12 +49,12 @@
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
             <AddComment model="Task" :id="id" :comments="task.comments" @success="getTask" :auth="auth" />
         </div>
-    </div>
 </template>
 
 <script>
 import Upload from "../images/Upload";
 import AddComment from "../comments/AddComment";
+
 export default {
     props : ['id', 'auth'],
     components : { Upload, AddComment },
@@ -64,11 +63,11 @@ export default {
             task : '',
         }
     },
-    created() {
-        this.getTask();
+   async created() {
+        await this.getTask();
     },
     methods : {
-        getTask(){
+         getTask(){
             let _this = this;
             axios.get('/getTask/'+_this.id)
                 .then(response => {
