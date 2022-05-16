@@ -1,6 +1,30 @@
 <template>
-    <div class="flex flex-col h-full">
-        <div class="flex-1 border border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
+    <div class="space-y-2">
+        <div class="flex items-start py-2 space-x-4">
+            <div class="min-w-0 flex-1">
+                <form class="relative" method="post" @submit.prevent="addComment">
+                    <div class="bg-gray-100  shadow p-2 overflow-hidden ">
+                        <textarea v-model="description" class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500" placeholder="Add your comment..."></textarea>
+                        <!-- Spacer element to match the height of the toolbar -->
+                        <div class="py-2" aria-hidden="true">
+                            <!-- Matches height of button in toolbar (1px border + 36px content height) -->
+                            <div class="py-px">
+                                <div class="h-9"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-between">
+                        <div class="flex items-center space-x-5">
+                            <Upload model="Comment" :id="false" @success="getTask" />
+                        </div>
+                        <div class="flex-shrink-0">
+                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Post</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="flex-1 rounded-lg shadow-sm overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
             <div class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm h-96 overflow-y-auto">
                 <!-- This example requires Tailwind CSS v2.0+ -->
                 <ul role="list" class="divide-y divide-gray-200 px-2">
@@ -20,6 +44,7 @@
                                        title="Reply"
                                        @click="handleOpenReplyModal(comment)"
                             />
+                            <TrashIcon @click="deleteComment(comment)" class="h-5 w-5 text-red-500 cursor-pointer" />
                         </div>
                         <div class="flex items-center " :class="auth.id === comment.created_by.id ? '' : 'flex-row-reverse'">
                             <ul class="px-2" v-if="comment.comment_replies_count">
@@ -33,42 +58,12 @@
                                            :class="auth.id === reply.created_by.id ? '' : 'ext-right'"
                                         >{{reply.created_at}}</p>
                                     </div>
+                                    <TrashIcon @click="deleteComment(reply)" class="h-5 w-5 text-red-500 cursor-pointer" />
                                 </li>
                             </ul>
                         </div>
                     </li>
                 </ul>
-            </div>
-        </div>
-        <div class="flex items-start space-x-4">
-            <div class="min-w-0 flex-1">
-                <form class="relative" method="post" @submit.prevent="addComment">
-                    <div class="border border-gray-300 rounded-lg shadow-sm overflow-hidden focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500">
-                        <textarea v-model="description" class="block w-full py-3 border-0 resize-none focus:ring-0 sm:text-sm" placeholder="Add your comment..."></textarea>
-                        <!-- Spacer element to match the height of the toolbar -->
-                        <div class="py-2" aria-hidden="true">
-                            <!-- Matches height of button in toolbar (1px border + 36px content height) -->
-                            <div class="py-px">
-                                <div class="h-9"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-0 inset-x-0 pl-3 pr-2 py-2 flex justify-between">
-                        <div class="flex items-center space-x-5">
-                            <div class="flex items-center">
-                                <button type="button" class="-m-2.5 w-10 h-10 rounded-full flex items-center justify-center text-gray-400 hover:text-gray-500">
-                                    <!-- Heroicon name: solid/paper-clip -->
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd" d="M8 4a3 3 0 00-3 3v4a5 5 0 0010 0V7a1 1 0 112 0v4a7 7 0 11-14 0V7a5 5 0 0110 0v4a3 3 0 11-6 0V7a1 1 0 012 0v4a1 1 0 102 0V7a3 3 0 00-3-3z" clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex-shrink-0">
-                            <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Post</button>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -124,12 +119,14 @@
 </template>
 
 <script>
-import { ReplyIcon } from '@heroicons/vue/solid'
+import { ReplyIcon, TrashIcon } from '@heroicons/vue/solid'
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
 import { CheckIcon } from '@heroicons/vue/outline'
+import Upload from "../images/Upload";
+
 export default {
     props : ['comment_id', 'model', 'id', 'comments', 'auth'],
-    components : { ReplyIcon, Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, CheckIcon },
+    components : { ReplyIcon, TrashIcon, Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot, CheckIcon, Upload },
     data(){
         return {
             description : '',
@@ -141,6 +138,19 @@ export default {
         this.comment_id_for_reply = this.comment_id;
     },
     methods : {
+        deleteComment(comment){
+          if(confirm('Are you sure you want to delete this comment?')){
+              let _this = this;
+              axios.post('/deleteComment', {
+                  id : comment.id
+              })
+                  .then(response => {
+                      _this.$emit('success')
+                  }).catch(error => {
+
+              })
+          }
+        },
         handleOpenReplyModal(comment){
             this.comment_id_for_reply = comment.id
             this.openReplyModal = true

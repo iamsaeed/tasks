@@ -86,7 +86,7 @@ export default {
             default : false
         } ,
         editTask : {
-            default : null
+            default : ''
         }
     },
     components : { SlideOver },
@@ -108,6 +108,11 @@ export default {
     mounted() {
         this.getProjects();
         this.getTaskStatuses();
+    },
+    created() {
+      if(this.isEditable){
+          this.task = this.editTask
+      }
     },
     methods : {
         reset(){

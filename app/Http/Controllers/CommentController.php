@@ -27,8 +27,11 @@ class CommentController extends Controller
         return $this->processResponse('comment', $comment, $message);
     }
 
-    public function destroy(Comment $comment)
+    public function destroy(Request $request)
     {
+        $comments = Comment::where('id', $request->input('id'))
+        ->orWhere('parent_id', $request->input('id'))->delete();
 
+        return $this->processResponse('comment', $comments, 'Comment deleted!');
     }
 }

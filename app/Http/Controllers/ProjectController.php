@@ -39,7 +39,11 @@ class ProjectController extends Controller
 
    public function get()
    {
-       $projects = Project::orderBy('name', 'asc')->where('created_id', Auth::id())->get();
+       $projects = Project::orderBy('name', 'asc')
+           ->where('created_id', Auth::id())
+           ->with('created_by')
+           ->withCount('tasks')
+           ->get();
 
        return $this->processResponse('projects', $projects);
    }
@@ -52,5 +56,13 @@ class ProjectController extends Controller
             ->get();
 
         return $this->processResponse('projects', $projects);
+    }
+
+    public function destroy(Request $request)
+    {
+        $project = Project::find($request->input('id'));
+        $project->delete();
+
+        return $this->processResponse('project', null,  'Project deleted successfully!');
     }
 }

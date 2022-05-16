@@ -59,7 +59,7 @@ export default {
           window.location = '/tasks/'+this.task.id
         },
         editTask(){
-
+            this.$emit('edit', this.task)
         },
         deleteTask(){
             let _this = this;

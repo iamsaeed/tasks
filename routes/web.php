@@ -15,6 +15,7 @@ Route::middleware('auth')->group(function()
     Route::view('/home', 'home')->name('home');
 
     Route::post('/add-project', [\App\Http\Controllers\ProjectController::class, 'add']);
+    Route::post('/delete-projects', [\App\Http\Controllers\ProjectController::class, 'destroy']);
     Route::get('/get-projects', [\App\Http\Controllers\ProjectController::class, 'get']);
     Route::get('/get-active-projects', [\App\Http\Controllers\ProjectController::class, 'getActive']);
 
@@ -26,10 +27,12 @@ Route::middleware('auth')->group(function()
     Route::post('/add_task_status', [\App\Http\Controllers\TaskStatusController::class, 'add']);
     Route::get('/get_task_statuses', [\App\Http\Controllers\TaskStatusController::class, 'get']);
     Route::get('/get_active_task_statuses', [\App\Http\Controllers\TaskStatusController::class, 'getActive']);
+    Route::post('/delete-task-status', [\App\Http\Controllers\TaskStatusController::class, 'destroy']);
 
     Route::post('/uploadAttachment', [\App\Http\Controllers\ImageController::class, 'uploadAttachment']);
 
     Route::post('/addComment', [\App\Http\Controllers\CommentController::class, 'add']);
+    Route::post('/deleteComment', [\App\Http\Controllers\CommentController::class, 'destroy']);
 });
 
 Auth::routes();

@@ -9,9 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-   public function get()
+   public function get(Request $request)
    {
+       $project_id = $request->input('project_id');
+
        $tasks = Task::where('created_id', Auth::id())
+           ->search('project_id', $project_id)
            ->where('created_id', Auth::id())
            ->with(['created_by'])
            ->orderBy('created_at', 'desc')

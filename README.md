@@ -59,19 +59,17 @@ I used the pre-existing Laravel UI package which is generally available in Larav
 Thereafter, the approach was simple, I read the requirement and tried to complete them one by one.
 
 ## Dislikes
-The time frame of 2 days, assuming I would work 6-8 hours was pretty less for the amount of work required to delivery this project.
-
-The worst part is that no matter how hard I tried, I have not been able to deliver my best in this timeframe. I sacrificed Perfection for Progress!
+The time frame of 2 days was pretty less for the amount of work required to delivery this project. I have worked 6-8 hours for 3 days to complete this work.
 
 ## Requirement Status
 1. [x] User should be able to sign up and login
-2. [ ] User should be able to Create, Update and Delete projects
+2. [x] User should be able to Create, Update and Delete projects
 3. [x] Users should be able to tasks under specific project
-4. [ ] Tasks should be editable and also can be deleted.
-5. [ ] Tasks should be prioritized within a project
-6. [ ] Tasks should have deadlines.
-7. [ ] Apply proper status(to-do, in-progress,done) of tasks
+4. [x] Tasks should be editable and also can be deleted.
+5. [ ] Tasks should be prioritized within a project - (**DB structure ready, UI not done**)
+6. [x] Tasks should have deadlines.
+7. [x] Apply proper status(to-do, in-progress,done) of tasks
 8. [x] Under the task, the user can add comments and make sure the nested comment is applicable so that if we want to respond to the specific comment then we should be able to do that.
-10. [ ] Comment should be deletable
+10. [x] Comment should be deletable
 11. [ ] Users can also attach files in comment and task description.
 13. [ ] It should have automated tests for all functionality.
