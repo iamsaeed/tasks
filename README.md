@@ -74,5 +74,6 @@ The time frame of 2 days was pretty less for the amount of work required to deli
 7. [x] Apply proper status(to-do, in-progress,done) of tasks
 8. [x] Under the task, the user can add comments and make sure the nested comment is applicable so that if we want to respond to the specific comment then we should be able to do that.
 10. [x] Comment should be deletable
-11. [ ] Users can also attach files in comment and task description.
+11. [x] Users can also attach files in task description.
+11. [ ] Users can also attach files in comment.
 13. [ ] It should have automated tests for all functionality.
